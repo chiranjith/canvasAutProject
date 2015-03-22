@@ -49,6 +49,18 @@ public class CanvasPageTest {
 							wE.writeExcel(resultFilePath, "result", valueToWrite);	}
 					}
 				}catch (Exception e) {e.printStackTrace();}
+			}else if(row.getCell(2).toString().equals("courseCount")){
+				try{
+					String tcNum = row.getCell(0).toString();
+					int exp = (int) row.getCell(3).getNumericCellValue()+1;
+					try{
+						dr.findElement(By.xpath("html/body/div[1]/div[2]/table/tbody/tr["+exp+"]/td[2]")).getText();
+						Object[] valueToWrite = new Object[]{tcNum,"courseCount","Fail","<=2",">2"};
+						wE.writeExcel(resultFilePath, "result", valueToWrite);
+					}catch (Exception e){
+						Object[] valueToWrite = new Object[]{tcNum,"courseCount","Pass","<=2","<=2"};
+						wE.writeExcel(resultFilePath, "result", valueToWrite);	}
+				}catch (Exception e) {e.printStackTrace();}
 			}
 		}
 		
