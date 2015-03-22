@@ -6,7 +6,6 @@ import org.openqa.selenium.WebDriver;
 import utilities.CopyResultFile;
 import configFiles.ConfigFile;
 public class DriverFile {
-
 	public static void main(String[] args) throws IOException {
 		ConfigFile cF = new ConfigFile();
 		String filePath = "C:\\Selenium\\canvasAutProject\\src\\configFiles";
@@ -15,7 +14,6 @@ public class DriverFile {
 		//Calling copy file method to copy the result template to result folder
 		CopyResultFile cRF = new CopyResultFile();
 		String resultFilePath = cRF.copyFile(filePath, "config.xlsx","config");
-
+		TestExecute.testFunctions(dr, resultFilePath);
 	}
-
 }
