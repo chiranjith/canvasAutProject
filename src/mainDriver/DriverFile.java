@@ -15,5 +15,6 @@ public class DriverFile {
 		CopyResultFile cRF = new CopyResultFile();
 		String resultFilePath = cRF.copyFile(filePath, "config.xlsx","config");
 		TestExecute.testFunctions(dr, resultFilePath);
+		dr.close();
 	}
 }

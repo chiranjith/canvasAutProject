@@ -8,6 +8,7 @@ public class TestExecute {
 		System.out.println("Inside TestExecute");
 		int itr = CanvasTestIteration.iterations(resultFilePath);
 		System.out.println("# of times the test cases will be run: "+itr);
+		System.out.println("resultFilePath: "+resultFilePath);
 		CanvasPageTest.canvasTest(dr, resultFilePath, itr);
 	}
 }
