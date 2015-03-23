@@ -11,6 +11,7 @@ import utilities.ReadExcel;
 import utilities.WriteExcel;
 
 public class CanvasPageTest {
+
 	public static void canvasTest(WebDriver dr, String resultFilePath, int itr) throws IOException{
 		String filePath = "C:\\Selenium\\Instructure\\src\\testCase\\";
 		ReadExcel rE = new ReadExcel();
@@ -61,8 +62,72 @@ public class CanvasPageTest {
 						Object[] valueToWrite = new Object[]{tcNum,"courseCount","Pass","<=2","<=2"};
 						wE.writeExcel(resultFilePath, "result", valueToWrite);	}
 				}catch (Exception e) {e.printStackTrace();}
+			}else if(row.getCell(2).toString().equals("checkCourseData")){
+				String tcNum = row.getCell(0).toString();
+				Sheet courseList = rE.readSheet(filePath, "FunctionalTestCaseMatrix.xlsx", "courseTableTestData");
+				int testCount = courseList.getLastRowNum();
+				int rowCounter=0;
+				for(int a=1; a<=itr; a++){
+					for(int k=1; k<=2;k++){	
+						try{
+							rowCounter=rowCounter+1;
+							if(rowCounter<=testCount){
+								Row x = courseList.getRow(rowCounter);
+								String expID = x.getCell(1).toString();
+								String expName = x.getCell(2).toString();
+								String expDesc = x.getCell(3).toString();
+								String actID = dr.findElement(By.xpath("html/body/div[1]/div[2]/table/tbody/tr["+k+"]/td[2]")).getText();
+								String actName = dr.findElement(By.xpath("html/body/div[1]/div[2]/table/tbody/tr["+k+"]/td[3]")).getText();
+								String actDesc = dr.findElement(By.xpath("html/body/div[1]/div[2]/table/tbody/tr["+k+"]/td[4]")).getText();
+								if(!actID.equals(expID)){
+									Object[] valueToWrite = new Object[]{tcNum,"checkCourseData","Fail",expID,actID,"Course result page: "+a+", Course #: "+k};
+									wE.writeExcel(resultFilePath, "result", valueToWrite);
+								}if(!actName.equals(expName)){
+									Object[] valueToWrite = new Object[]{tcNum,"checkCourseData","Fail",expName,actName,"Course result page: "+a+", Course #: "+k};
+									wE.writeExcel(resultFilePath, "result", valueToWrite);
+								}if(!actDesc.equals(expDesc)){
+									Object[] valueToWrite = new Object[]{tcNum,"checkCourseData","Fail",expDesc,actDesc,"Course result page: "+a+", Course #: "+k};
+									wE.writeExcel(resultFilePath, "result", valueToWrite);	
+								}else{
+									Object[] valueToWrite = new Object[]{tcNum,"checkCourseData","Pass","","","Course result page: "+a+", Course #: "+k};
+									wE.writeExcel(resultFilePath, "result", valueToWrite);
+								}
+							}
+						}catch (Exception e) {e.printStackTrace();}
+					}
+					//Footer Validation
+					if(a==1){
+						boolean prev = dr.findElement(By.xpath("html/body/div[1]/div[3]/div/button[2]")).isEnabled();
+						if(prev=false){
+							Object[] valueToWrite = new Object[]{"TC005","checkPrevButton","Fail","Prev button Disabled","Enabled","Course result page: "+a};
+							wE.writeExcel(resultFilePath, "result", valueToWrite);
+						}else{
+							Object[] valueToWrite = new Object[]{"TC005","checkPrevButton","Pass","Prev button Disabled","Disabled","Course result page: "+a};
+							wE.writeExcel(resultFilePath, "result", valueToWrite);
+						}
+						boolean next = dr.findElement(By.xpath("html/body/div[1]/div[3]/div/button[3]")).isEnabled();
+						if(next=false){
+							Object[] valueToWrite = new Object[]{"TC006","checkNextButton","Fail","Next button Enabled","Disabled","Course result page: "+a};
+							wE.writeExcel(resultFilePath, "result", valueToWrite);
+						}else{
+							Object[] valueToWrite = new Object[]{"TC006","checkNextButton","Pass","Next button Enabled","Enabled","Course result page: "+a};
+							wE.writeExcel(resultFilePath, "result", valueToWrite);
+						}
+						String curPage = "Current Page - "+a;
+						String actPage = dr.findElement(By.xpath("html/body/div[1]/div[3]/div/span")).getText();
+						if(!curPage.equals(actPage)){
+							Object[] valueToWrite = new Object[]{"TC007","checkPageNumber","Fail",curPage,actPage,"Course result page: "+a};
+							wE.writeExcel(resultFilePath, "result", valueToWrite);
+						}else{
+							Object[] valueToWrite = new Object[]{"TC007","checkPageNumber","Pass",curPage,actPage,"Course result page: "+a};
+							wE.writeExcel(resultFilePath, "result", valueToWrite);
+						}
+					}
+					//Navigate to next page
+					dr.findElement(By.xpath("html/body/div[1]/div[3]/div/button[3]")).click();
+					try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
+				}
 			}
 		}
-		
 	}
 }
