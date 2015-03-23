@@ -123,6 +123,34 @@ public class CanvasPageTest {
 							wE.writeExcel(resultFilePath, "result", valueToWrite);
 						}
 					}
+					//Test Prev & Next buttons in the middle pages (Not 1st & Last page)
+					if(a>1&&a<itr){
+						boolean prev = dr.findElement(By.xpath("html/body/div[1]/div[3]/div/button[2]")).isEnabled();
+						if(prev=false){
+							Object[] valueToWrite = new Object[]{"TC005","checkPrevButton","Fail","Prev button Enabled","Disabled","Course result page: "+a};
+							wE.writeExcel(resultFilePath, "result", valueToWrite);
+						}else{
+							Object[] valueToWrite = new Object[]{"TC005","checkPrevButton","Pass","Prev button Enabled","Enabled","Course result page: "+a};
+							wE.writeExcel(resultFilePath, "result", valueToWrite);
+						}
+						boolean next = dr.findElement(By.xpath("html/body/div[1]/div[3]/div/button[3]")).isEnabled();
+						if(next=false){
+							Object[] valueToWrite = new Object[]{"TC006","checkNextButton","Fail","Next button Enabled","Disabled","Course result page: "+a};
+							wE.writeExcel(resultFilePath, "result", valueToWrite);
+						}else{
+							Object[] valueToWrite = new Object[]{"TC006","checkNextButton","Pass","Next button Enabled","Enabled","Course result page: "+a};
+							wE.writeExcel(resultFilePath, "result", valueToWrite);
+						}
+						String curPage = "Current Page - "+a;
+						String actPage = dr.findElement(By.xpath("html/body/div[1]/div[3]/div/span")).getText();
+						if(!curPage.equals(actPage)){
+							Object[] valueToWrite = new Object[]{"TC007","checkPageNumber","Fail",curPage,actPage,"Course result page: "+a};
+							wE.writeExcel(resultFilePath, "result", valueToWrite);
+						}else{
+							Object[] valueToWrite = new Object[]{"TC007","checkPageNumber","Pass",curPage,actPage,"Course result page: "+a};
+							wE.writeExcel(resultFilePath, "result", valueToWrite);
+						}
+					}
 					//Navigate to next page
 					dr.findElement(By.xpath("html/body/div[1]/div[3]/div/button[3]")).click();
 					try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
